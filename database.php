@@ -59,5 +59,20 @@ function deleteTask($id){
 	$query = $conn->prepare("DELETE FROM task WHERE id = :id");
 	$query->execute(array(":id" -> $id));
 }
-
+function getTodo($id){
+	$conn = connAll();
+	$query = $conn->prepare("SELECT * FROM todo WHERE id=:id");
+	$query->bindParam(":id", $id);
+	$query->execute();
+	$singleTodo = $query->fetch();
+	return $singleTodo;
+}
+function getTask($id){
+	$conn = connAll();
+	$query = $conn->prepare("SELECT * FROM task WHERE id=:id");
+	$query->bindParam(":id", $id);
+	$query->execute();
+	$singleTask = $query->fetch();
+	return $singleTask;
+}
 ?>
