@@ -75,4 +75,14 @@ function getTask($id){
 	$singleTask = $query->fetch();
 	return $singleTask;
 }
+function updateTodo($id, $name){
+	$conn = connAll();
+	$query = $conn->prepare("UPDATE todo SET name=:name WHERE id=:id");
+	$query->bindParam(':name', $name);
+}
+function deleteTodo($id){
+	$conn = connAll();
+	$query = $conn->prepare("DELETE FROM todo WHERE id = :id");
+	$query->execute(array(":id" -> $id));
+}
 ?>
