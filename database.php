@@ -8,8 +8,16 @@ function connAll(){
 	print "Error!: " . $e->getMessage() . "<br/>";
 	die();
 	}
-} 
-
+}  
+function clean($data)
+{
+    $data = preg_replace('@[^A-Za-z0-9\w\ ]@', '', $data);
+    $data = htmlspecialchars($data);
+    $data = stripslashes($data);
+    $data = trim($data);
+    
+    return $data;
+}
 function allTodo(){
 	$conn = connAll();
 	$query = "SELECT * FROM todo ORDER BY id";
@@ -17,6 +25,7 @@ function allTodo(){
 	$result = $conn->prepare($query);
 	$result->execute();
 	$rows = $result->fetchAll();
+	$data = clean($result);
 	return $rows;
 }
 
@@ -29,11 +38,10 @@ function allTask(){
 	$rows = $result->fetchAll();
 	return $rows;
 }
-function addTodo($id,$name){
+function addTodo($name){
 	$conn = connAll();
-	$query = $conn->prepare("INSERT INTO todo (id, Name) VALUES (:id, :Name)");
+	$query = $conn->prepare("INSERT INTO todo (id, Name) VALUES (:Name)");
 	$query -> execute(array(
-		':id' => $id, 
 		':Name' => $name));
 }
 function addTask($id,$description,$time,$status){
@@ -42,7 +50,7 @@ function addTask($id,$description,$time,$status){
 	$query -> execute(array(
 	':id' => $id,
 	':description' => $description,
-	':time' => time('h:i:s', strtotime($time)),
+	':time' => $time,
 	':status' => $status
 ));
 }
@@ -56,8 +64,8 @@ function updateTask($id,$description,$time,$status){
 }
 function deleteTask($id){
 	$conn = connAll();
-	$query = $conn->prepare("DELETE FROM task WHERE id = :id");
-	$query->execute(array(":id" -> $id));
+	$query = $conn->prepare("DELETE FROM task WHERE id = ?");
+	$query->execute([$id]);
 }
 function getTodo($id){
 	$conn = connAll();
@@ -82,7 +90,11 @@ function updateTodo($id, $name){
 }
 function deleteTodo($id){
 	$conn = connAll();
-	$query = $conn->prepare("DELETE FROM todo WHERE id = :id");
-	$query->execute(array(":id" -> $id));
+	$query = $conn->prepare("DELETE FROM todo WHERE id = ?");
+	$query->execute([$id]);
 }
-?>
+
+
+if (isset($_POST['makeTodoList'])){
+	addTodo($_POST['todoName']);
+}
