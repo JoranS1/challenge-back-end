@@ -12,6 +12,7 @@ $task = allTask();?>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <title>Todo list</title>
 	<link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
 </head>
 
 <body>
@@ -48,10 +49,27 @@ $task = allTask();?>
             <header class="w3-container w3-light-grey">
                 <h3><?php echo $value['name'];?>
                 <button class="w3-btn" onclick="sortTodo(<?php echo $value['id']; ?>, 'description')">
+                
             </button>
-            <button class="w3-btn" onclick="sortTodo(<?php echo $value['id']; ?>, 'time')"></button>
-            <button class="w3-btn" onclick="sortTodo(<?php echo $value['id']; ?>, 'status')"></button>
+            <button class="w3-btn" onclick="sortTodo(<?php echo $value['id']; ?>, 'time')">
+            <i class="fa-fa-clock" aria-hidden="true"></i>
+        </button>
+            <button class="w3-btn" onclick="sortTodo(<?php echo $value['id']; ?>, 'status')">
+            <i class="fa-fa-calendar-check-o" aria-hidden="true"></i>
+        </button>
             </header>
+            <div class="w3-container" id="todoContainer<?php echo $value['id'];?>">
+            <?php 
+            
+            foreach($task as $values):?>
+            <div class="task" id="taskId<?php echo $values["id"]; ?>" data-todoID="<?php echo $value['id'];?>" data-taskName="<?php echo $values['name'];?>" data-time="<?php echo $values['time'];?>" data-status="<?php echo $values['status']?>>
+                <h3><?php echo $values['name'];?></h3>
+                <p><?php echo $value['description'];?></p>
+            </div>
+            <?php endforeach;?>
+        
+        
+        </div>
         </div>
 
         <?php endforeach;?>
