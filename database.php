@@ -44,23 +44,24 @@ function addTodo($name){
 	$query -> execute(array(
 		':Name' => $name));
 }
-function addTask($id,$description,$time,$status){
+function addTask($description,$time,$status,$listId){
 	$conn = connAll();
-	$query = $conn->prepare("INSERT INTO task (id, description, time, status) VALUES (:id, :description, :time, :status)");
+	$query = $conn->prepare("INSERT INTO task (id, description, time, status,listId) VALUES (:description, :time, :status,:listId)");
 	$query -> execute(array(
-	':id' => $id,
 	':description' => $description,
 	':time' => $time,
-	':status' => $status
+	':status' => $status,
+	':listId' => $listId
 ));
 }
-function updateTask($id,$description,$time,$status){
+function updateTask($id,$description,$time,$status,$listId){
 	$conn = connAll();
-	$query = $conn->prepare("UPDATE task SET description=:description, time=:time, status=:status WHERE id=:id");
+	$query = $conn->prepare("UPDATE task SET description=:description, time=:time, status=:status, listId=:listId WHERE id=:id");
 	$query->bindParam(':description',$description);
 	$query->bindParam(':time',$time);
 	$query->bindParam(':status',$status);
 	$query->bindParam(':id',$id);
+	$query->bindParam(':listId',$listId);
 }
 function deleteTask($id){
 	$conn = connAll();
@@ -93,8 +94,41 @@ function deleteTodo($id){
 	$query = $conn->prepare("DELETE FROM todo WHERE id = ?");
 	$query->execute([$id]);
 }
+function filterStatus(){
+	$conn = connAll();
+	$query = $conn->prepare("SELECT * FROM task ORDER BY status");
+	$query->execute();
+	$result = $query->fetchAll();
+	return $result;
+}
+
+function filterTime(){
+	$conn = connAll();
+	$query = $conn->prepare("SELECT * FROM task ORDER BY time DESC");
+	$query->execute();
+	$result = $query->fetchAll();
+	return $result;
+}
+
+//clean functions
+$taskId = clean($_POST['taskId']);
+$todoListId = clean($_POST['todoListId']);
+$taskTime = clean($_POST['taskTime']);
+$taskStatus = clean($_POST['taskStatus']);
+$taskDescription = clean($_POST['taskDescription']);
+$todoName = clean($_POST['todoName']);
 
 
+//post if statements
 if (isset($_POST['makeTodoList'])){
-	addTodo($_POST['todoName']);
+	addTodo($todoName);
+}
+if(isset($_POST['makeTaskList'])){
+	addTask($taskDescription, $taskTime, $taskStatus, $todoListId);
+}
+if(isset($_POST['updateTask'])){
+	updateTask($taskId, $taskDescription, $taskTime, $taskStatus, $todoListId);
+}
+if(isset($_POST['deleteTask'])){
+	deleteTask($taskId);
 }
