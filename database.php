@@ -87,7 +87,7 @@ function getTask($id){
 function updateTodo($id, $name){
 	$conn = connAll();
 	$query = $conn->prepare("UPDATE todo SET name=:name WHERE id=:id");
-	$query->bindParam(':name', $name);
+	$query->bindParam(':id', $id, ':name', $name);
 }
 function deleteTodo($id){
 	$conn = connAll();
@@ -111,19 +111,19 @@ function filterTime(){
 }
 
 //clean functions
-$taskId = clean($_POST['taskId']);
+/*$taskId = clean($_POST['taskId']);
 $todoListId = clean($_POST['todoListId']);
 $taskTime = clean($_POST['taskTime']);
 $taskStatus = clean($_POST['taskStatus']);
 $taskDescription = clean($_POST['taskDescription']);
-$todoName = clean($_POST['todoName']);
+$todoName = clean($_POST['todoName']);*/
 
 
 //post if statements
 if (isset($_POST['makeTodoList'])){
 	addTodo($todoName);
 }
-if(isset($_POST['makeTaskList'])){
+if(isset($_POST['makeTask'])){
 	addTask($taskDescription, $taskTime, $taskStatus, $todoListId);
 }
 if(isset($_POST['updateTask'])){
