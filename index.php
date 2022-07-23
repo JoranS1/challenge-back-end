@@ -32,8 +32,9 @@ $task = allTask();
 
                     <form action="#" method="post" class="w3-container">
                         <h3>Create a todo-list</h3>
-                        <input type="text" placeholder="The name of the list..." name="todoName"
+                        <input type="text" placeholder="The name of the list..." class="w3-input w3-border" name="todoName"
                             pattern="[a-zA-Z0-9\s]+" required>
+                       
                         <br>
                         <input type="submit" name="makeTodoList" value="Make the Todo list" class="w3-button w3-blue">
                     </form>
@@ -84,7 +85,9 @@ $task = allTask();
                             <h3>New task:</h3>
                             <input type="hidden" name="taskId" value="modalItem<?php echo $values['id']?>">
                             <br>
-                            <textarea  name="taskDescription" style="resize: vertical;" cols="25" rows="10" placeholder="Description of the task" pattern="[a-zA-Z0-9\s]+" required value=<?php echo $values['description']?> class="w3-input w3-border">
+                            <input type="text" name="todoName" placeholder="Name of the task" class="w3-input w3-border" pattern="[a-zA-Z0-9\s]+" required value="<?php echo $values['name']?>">
+                            <br>
+                            <textarea  name="taskDescription" style="resize: vertical;" cols="25" rows="10" placeholder="Description of the task" class="w3-input w3-border" pattern="[a-zA-Z0-9\s]+" required value=<?php echo $values['description']?> class="w3-input w3-border">
                             <br>
                             <input type="number" name="taskTime" placeholder="Duration of the task (in minutes please)" class="w3-input w3-border" required value=<?php echo $values['time']?>>
                             <br>
@@ -97,8 +100,8 @@ $task = allTask();
                                 echo 'Checked';
                             } ?>>
                             <label>Inactive</label><br>
-                            <input type="submit" name="updateTask" value="Update Task" class="w3-btn w3-border">
-                            <input type="submit" name="deleteTask" value="Delete Task" class="w3-btn w3-red w3-border">
+                            <input type="submit" name="updateTask" value="Update Task" class="w3-btn w3-block">
+                            <input type="submit" name="deleteTask" value="Delete Task" class="w3-btn w3-red w3-block">
                             <br>
                         </form>
                     </div>
@@ -116,25 +119,82 @@ $task = allTask();
     <div id="modal<?php echo $value['id']?>" class="w3-modal">
         <div class="w3-modal-content">
             <div class="w3-container">
-            <span onclick="modal('modalItem<?php echo $value['id']?>', 'close')" cols="25" rows="10" class="w3-button w3-display-topright">&times;</span>
+            <span onclick="modal('modal<?php echo $value['id']?>', 'close')" cols="25" rows="10" class="w3-button w3-display-topright">&times;</span>
 
             <form action="#" method="post" class="w3-container">
                 <h3>New task</h3>
                 <input type="hidden" name="todoListId" value="<?php echo $value['id']?>">
                 <br>
-                <textarea name="taskDescription" style="resize: vertical;" placeholder="Description of the task" pattern="[a-zA-Z0-9\s]+" required>
-                <input type="number" name="taskTime" placeholder="Duration of the task (in minutes please)" class="w3-input w3-border" required>
-
+                <input type="text" name="todoName" placeholder="Name of the task" class="w3-input w3-border" pattern="[a-zA-Z0-9\s]+" required>
+                <br>
+                <textarea name="taskDescription" style="resize: vertical;" class="w3-input w3-border" placeholder="Description of the task" pattern="[a-zA-Z0-9\s]+" required>
+                <br>
+                <input type="number" name="taskTime" class="w3-input w3-border" placeholder="Duration of the task (in minutes please)" class="w3-input w3-border" required>
+                <br>
+                <input type="submit" name="makeTask" value="Add task" class="w3-btn w3-block">
+                <br>
             </form>
             </div>
 
         </div>
 </div>
         </div>
-    
+        <div id="modalEditTodo<?php echo $value['id']?>" class="w3-modal">
+        <div class="w3-modal-content">
+            <div class="w3-container">
+            <span onclick="modal('modalEditTodo<?php echo $value['id']?>', 'close')" cols="25" rows="10" class="w3-button w3-display-topright">&times;</span>
+            <form action="#" method="post" class="w3-container">
+                <h3>Edit Todo List</h3>
+                <input type="hidden" name="todoListId" value="<?php echo $value['id']?>">
+                <br>
+                <input type="text" name="todoName" placeholder="Name of the todo list" class="w3-input w3-border" pattern="[a-zA-Z0-9\s]+" required value="<?php echo $value['name']?>">
+                <input type="submit" name="updateTodo" value="Update Todo List" class="w3-btn w3-block">
+                <input type="submit" name="deleteTodo" value="Delete Todo List" class="w3-btn w3-red w3-block">
+            </form>
+            </div>
+            </div>
+            </div>
         <?php endforeach;?>
         </div>
     </div>
+        <script>
+            function modal(elementID, openedClosed){
+                let elementName = document.getElementById(elementID);
+                if(openedClosed === "open"){
+                    elementName.style.display = "block";
+                } else{
+                    elementName.style.display = "none";  
+                }
+            }
 
+            function sortTodo(todo, filter){
+                let todoItems = document.querySelectorAll("[data-todoID='"+ todo + "']")
+                let sortTodo = [];
+                for(let val of todoItems){
+                    var currentIdName = val.id;
+                    var currentTodoName = val.name;
+                    if(filter === "description"){
+                        let filterCheck = val.dataset.description;
+                    }else if(filter === "time"){
+                        let filterCheck = val.dataset.time;
+                    }else if(filter === "status"){
+                        let filterCheck = val.dataset.status;
+                    } else{
+                        filterCheck = currentTodoName;
+                    }
+
+                    sortTodo.push([currentIdName, filterCheck]);
+                }
+                    sortTodo.sort(function(a, b){
+                        return a[1] - b[1];
+                    });
+
+                    for(let i = 0; i < sortTodo.length; i++){
+                        console.log(sortTodo[i][0]);
+                        document.getElementById(sortTodo[i][0]).style.order = i;
+                    }
+                
+            }
+        </script>
 </body>
 </html>

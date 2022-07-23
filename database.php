@@ -9,8 +9,7 @@ function connAll(){
 	die();
 	}
 }  
-function clean($data)
-{
+function clean($data){
     $data = preg_replace('@[^A-Za-z0-9\w\ ]@', '', $data);
     $data = htmlspecialchars($data);
     $data = stripslashes($data);
@@ -40,23 +39,25 @@ function allTask(){
 }
 function addTodo($name){
 	$conn = connAll();
-	$query = $conn->prepare("INSERT INTO todo (id, Name) VALUES (:Name)");
+	$query = $conn->prepare("INSERT INTO todo (id, name) VALUES (:name)");
 	$query -> execute(array(
-		':Name' => $name));
+		':name' => $name));
 }
-function addTask($description,$time,$status,$listId){
+function addTask($description,$name,$time,$listId){
 	$conn = connAll();
-	$query = $conn->prepare("INSERT INTO task (id, description, time, status,listId) VALUES (:description, :time, :status,:listId)");
+	$query = $conn->prepare("INSERT INTO task (id, name,description, time, status,listId) VALUES (NULL, name, :description, :time, 1,:listId)");
 	$query -> execute(array(
+	':name' => $name,
 	':description' => $description,
 	':time' => $time,
-	':status' => $status,
+	':status' => 1,
 	':listId' => $listId
 ));
 }
-function updateTask($id,$description,$time,$status,$listId){
+function updateTask($id,$name,$description,$time,$status,$listId){
 	$conn = connAll();
-	$query = $conn->prepare("UPDATE task SET description=:description, time=:time, status=:status, listId=:listId WHERE id=:id");
+	$query = $conn->prepare("UPDATE task SET name=:name description=:description, time=:time, status=:status, listId=:listId WHERE id=:id");
+	$query->bindParam(':name',$name);
 	$query->bindParam(':description',$description);
 	$query->bindParam(':time',$time);
 	$query->bindParam(':status',$status);
@@ -84,10 +85,10 @@ function getTask($id){
 	$singleTask = $query->fetch();
 	return $singleTask;
 }
-function updateTodo($id, $name){
+function updateTodo($name){
 	$conn = connAll();
 	$query = $conn->prepare("UPDATE todo SET name=:name WHERE id=:id");
-	$query->bindParam(':id', $id, ':name', $name);
+	$query->bindParam(':name', $name);
 }
 function deleteTodo($id){
 	$conn = connAll();
@@ -111,12 +112,13 @@ function filterTime(){
 }
 
 //clean functions
-/*$taskId = clean($_POST['taskId']);
+$taskId = clean($_POST['taskId']);
 $todoListId = clean($_POST['todoListId']);
 $taskTime = clean($_POST['taskTime']);
 $taskStatus = clean($_POST['taskStatus']);
 $taskDescription = clean($_POST['taskDescription']);
-$todoName = clean($_POST['todoName']);*/
+$todoName = clean($_POST['todoName']);
+
 
 
 //post if statements
@@ -124,11 +126,17 @@ if (isset($_POST['makeTodoList'])){
 	addTodo($todoName);
 }
 if(isset($_POST['makeTask'])){
-	addTask($taskDescription, $taskTime, $taskStatus, $todoListId);
+	addTask($todoName,$taskDescription, $taskTime, $todoListId);
 }
 if(isset($_POST['updateTask'])){
-	updateTask($taskId, $taskDescription, $taskTime, $taskStatus, $todoListId);
+	updateTask($taskId, $todoName,$taskDescription, $taskTime, $taskStatus, $todoListId);
 }
 if(isset($_POST['deleteTask'])){
 	deleteTask($taskId);
+}
+if (isset($_POST['updateTodo'])){
+	updateTodo($todoName);
+}
+if (isset($_POST['deleteTodo'])){
+	deleteTodo($todoListId);
 }
