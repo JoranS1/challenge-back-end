@@ -24,7 +24,6 @@ function allTodo(){
 	$result = $conn->prepare($query);
 	$result->execute();
 	$rows = $result->fetchAll();
-	$data = clean($result);
 	return $rows;
 }
 
