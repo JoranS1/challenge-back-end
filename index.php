@@ -13,7 +13,46 @@ $task = allTask();
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <title>Todo list</title>
 	<link rel="stylesheet" href="style/style.css">
-    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script>
+            function modal(elementID, openedClosed){
+                var elementName = document.getElementById(elementID);
+                if(openedClosed === "open"){
+                    elementName.style.display = "block";
+                } else{
+                    elementName.style.display = "none";  
+                }
+            }
+
+            function sortTodo(todo, filter){
+                var todoItems = document.querySelectorAll("[data-todoID='"+ todo + "']")
+                var sortTodo = [];
+                for(let val of todoItems){
+                    var currentIdName = val.id;
+                    var currentTodoName = val.name;
+                    if(filter === "description"){
+                        var filterCheck = val.dataset.description;
+                    }else if(filter === "time"){
+                        var filterCheck = val.dataset.time;
+                    }else if(filter === "status"){
+                        var filterCheck = val.dataset.status;
+                    } else{
+                        filterCheck = currentTodoName;
+                    }
+
+                    sortTodo.push([currentIdName, filterCheck]);
+                }
+                    sortTodo.sort(function(a, b){
+                        return a[1] - b[1];
+                    });
+
+                    for(let i = 0; i < sortTodo.length; i++){
+                        console.log(sortTodo[i][0]);
+                        document.getElementById(sortTodo[i][0]).style.order = i;
+                    }
+                
+            }
+        </script>
 </head>
 
 <body>
@@ -52,14 +91,14 @@ $task = allTask();
                 <button class="w3-btn" onclick="sortTodo(<?php echo $value['id']; ?>, 'description')">
             </button>
             <button class="w3-btn" onclick="sortTodo(<?php echo $value['id']; ?>, 'time')">
-            <i class="fa-fa-clock" aria-hidden="true"></i>
+            <i class="fa-fa-clock"></i>
         </button>
             <button class="w3-btn" onclick="sortTodo(<?php echo $value['id']; ?>, 'status')">
-            <i class="fa-fa-calendar-check-o" aria-hidden="true"></i>
+            <i class="fa-fa-calendar-check-o" ></i>
         </button>
             </header>
             <div class="w3-container" id="todoContainer<?php echo $value['id'];?>">
-            <?php foreach($tasks as $values):?>
+            <?php foreach($task as $values):?>
             <div class="task" id="taskId<?php echo $values["id"]; ?>" data-todoID="<?php echo $values['id'];?>" data-taskName="<?php echo $values['name'];?>" data-taskTime="<?php echo $values['time'];?>" data-taskStatus="<?php echo $values['status']?>">
                 <h3><?php echo $values["name"];?></h3>
                 <p><?php echo $values["description"];?></p>
@@ -71,7 +110,7 @@ $task = allTask();
                     echo "inactive";
                 }
                 ?></span>
-                <span class="w3-button w3-orange" onclick="modal('modalItem<?php echo $values['id']?>', 'open')">
+                <span class="w3-button w3-orange" onclick="modal('modalTask<?php echo $values['id']?>', 'open')">
             Edit Task <i class="fa-solid fa-gear"></i>
         </span>
             </div>
@@ -80,14 +119,14 @@ $task = allTask();
             <div id="modalTask<?php echo $values['id'] ?>" class="w3-modal">
                 <div class="w3-modal-content">
                     <div class="w3-container">
-                        <span onclick="modal('modalItem<?php echo $values['id']?>', 'close')" class="w3-button w3-display-topright">&times;</span>
+                        <span onclick="modal('modalTask<?php echo $values['id']?>', 'close')" class="w3-button w3-display-topright">&times;</span>
                         <form action="#" method="post" class="w3-container">
                             <h3>New task:</h3>
                             <input type="hidden" name="taskId" value="modalItem<?php echo $values['id']?>">
                             <br>
-                            <input type="text" name="todoName" placeholder="Name of the task" class="w3-input w3-border" pattern="[a-zA-Z0-9\s]+" required value="<?php echo $values['name']?>">
+                            <input type="text" name="taskName" placeholder="Name of the task" class="w3-input w3-border" pattern="[a-zA-Z0-9\s]+" required value="<?php echo $values['name']?>">
                             <br>
-                            <textarea  name="taskDescription" style="resize: vertical;" cols="25" rows="10" placeholder="Description of the task" class="w3-input w3-border" pattern="[a-zA-Z0-9\s]+" required value=<?php echo $values['description']?> class="w3-input w3-border">
+                            <textarea  name="taskDescription" style="resize: vertical;" cols="25" rows="10" placeholder="Description of the task" class="w3-input w3-border" pattern="[a-zA-Z0-9\s]+" required value=<?php echo $values['description']?> class="w3-input w3-border"></textarea>
                             <br>
                             <input type="number" name="taskTime" placeholder="Duration of the task (in minutes please)" class="w3-input w3-border" required value=<?php echo $values['time']?>>
                             <br>
@@ -114,9 +153,9 @@ $task = allTask();
         <br>
         <div style="position: relative; bottom: 0;">
                 <button class="w3-button w3-block w3-purple" onclick="modal('modalEditTodo<?php echo $value['id']?>', 'open')">Edit the Todo List</button>
-                <button class="w3-button w3-block w3-green" onclick="modal('modal<?php echo $value['id']?>', 'open')">New task</button>
+                <button class="w3-button w3-block w3-green" onclick="modal('modalNewTask<?php echo $value['id']?>', 'open')">New task</button>
     </div>
-    <div id="modal<?php echo $value['id']?>" class="w3-modal">
+    <div id="modalNewTask<?php echo $value['id']?>" class="w3-modal">
         <div class="w3-modal-content">
             <div class="w3-container">
             <span onclick="modal('modal<?php echo $value['id']?>', 'close')" cols="25" rows="10" class="w3-button w3-display-topright">&times;</span>
@@ -125,7 +164,7 @@ $task = allTask();
                 <h3>New task</h3>
                 <input type="hidden" name="todoListId" value="<?php echo $value['id']?>">
                 <br>
-                <input type="text" name="todoName" placeholder="Name of the task" class="w3-input w3-border" pattern="[a-zA-Z0-9\s]+" required>
+                <input type="text" name="taskName" placeholder="Name of the task" class="w3-input w3-border" pattern="[a-zA-Z0-9\s]+" required>
                 <br>
                 <textarea name="taskDescription" style="resize: vertical;" class="w3-input w3-border" placeholder="Description of the task" pattern="[a-zA-Z0-9\s]+" required>
                 <br>
@@ -157,44 +196,6 @@ $task = allTask();
         <?php endforeach;?>
         </div>
     </div>
-        <script>
-            function modal(elementID, openedClosed){
-                let elementName = document.getElementById(elementID);
-                if(openedClosed === "open"){
-                    elementName.style.display = "block";
-                } else{
-                    elementName.style.display = "none";  
-                }
-            }
-
-            function sortTodo(todo, filter){
-                let todoItems = document.querySelectorAll("[data-todoID='"+ todo + "']")
-                let sortTodo = [];
-                for(let val of todoItems){
-                    var currentIdName = val.id;
-                    var currentTodoName = val.name;
-                    if(filter === "description"){
-                        let filterCheck = val.dataset.description;
-                    }else if(filter === "time"){
-                        let filterCheck = val.dataset.time;
-                    }else if(filter === "status"){
-                        let filterCheck = val.dataset.status;
-                    } else{
-                        filterCheck = currentTodoName;
-                    }
-
-                    sortTodo.push([currentIdName, filterCheck]);
-                }
-                    sortTodo.sort(function(a, b){
-                        return a[1] - b[1];
-                    });
-
-                    for(let i = 0; i < sortTodo.length; i++){
-                        console.log(sortTodo[i][0]);
-                        document.getElementById(sortTodo[i][0]).style.order = i;
-                    }
-                
-            }
-        </script>
+        
 </body>
 </html>

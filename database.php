@@ -38,7 +38,7 @@ function allTask(){
 }
 function addTodo($name){
 	$conn = connAll();
-	$query = $conn->prepare("INSERT INTO todo (id, name) VALUES (:name)");
+	$query = $conn->prepare("INSERT INTO todo (id, name) VALUES (NULL, :name)");
 	$query -> execute(array(
 		':name' => $name));
 }
@@ -117,6 +117,7 @@ $taskTime = clean($_POST['taskTime']);
 $taskStatus = clean($_POST['taskStatus']);
 $taskDescription = clean($_POST['taskDescription']);
 $todoName = clean($_POST['todoName']);
+$taskName = clean($_POST['taskName']);
 
 
 
@@ -125,10 +126,10 @@ if (isset($_POST['makeTodoList'])){
 	addTodo($todoName);
 }
 if(isset($_POST['makeTask'])){
-	addTask($todoName,$taskDescription, $taskTime, $todoListId);
+	addTask($taskName,$taskDescription, $taskTime, $todoListId);
 }
 if(isset($_POST['updateTask'])){
-	updateTask($taskId, $todoName,$taskDescription, $taskTime, $taskStatus, $todoListId);
+	updateTask($taskId, $taskName,$taskDescription, $taskTime, $taskStatus, $todoListId);
 }
 if(isset($_POST['deleteTask'])){
 	deleteTask($taskId);
