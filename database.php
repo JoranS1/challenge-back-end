@@ -53,15 +53,12 @@ function addTask($description,$name,$time,$listId){
 	':listId' => $listId
 ));
 }
-function updateTask($id,$name,$description,$time,$status,$listId){
+function updateTask($id,$name,$description,$time,$status){
 	$conn = connAll();
-	$query = $conn->prepare("UPDATE task SET name=:name description=:description, time=:time, status=:status, listId=:listId WHERE id=:id");
-	$query->bindParam(':name',$name);
-	$query->bindParam(':description',$description);
-	$query->bindParam(':time',$time);
-	$query->bindParam(':status',$status);
-	$query->bindParam(':id',$id);
-	$query->bindParam(':listId',$listId);
+	$query = $conn->prepare("UPDATE task SET name=:name description=:description, time=:time, status=:status WHERE id=:id");
+	$query->execute([":name" => $name, ":description" => $description, ":time" => $time, ":status" => $status, ":id" => $id]);
+
+	
 }
 function deleteTask($id){
 	$conn = connAll();
@@ -88,6 +85,7 @@ function updateTodo($name){
 	$conn = connAll();
 	$query = $conn->prepare("UPDATE todo SET name=:name WHERE id=:id");
 	$query->bindParam(':name', $name);
+	$query->execute();
 }
 function deleteTodo($id){
 	$conn = connAll();

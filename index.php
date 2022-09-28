@@ -126,7 +126,7 @@ $task = allTask();
                             <br>
                             <input type="text" name="taskName" placeholder="Name of the task" class="w3-input w3-border" pattern="[a-zA-Z0-9\s]+" required value="<?php echo $values['name']?>">
                             <br>
-                            <textarea  name="taskDescription" style="resize: vertical;" cols="25" rows="10" placeholder="Description of the task" class="w3-input w3-border" pattern="[a-zA-Z0-9\s]+" required value=<?php echo $values['description']?> class="w3-input w3-border"></textarea>
+                            <input type="text" name="taskDescription" placeholder="Description of the task" class="w3-input w3-border" pattern="[a-zA-Z0-9\s]+" required value=<?php echo $values['description']?> class="w3-input w3-border">
                             <br>
                             <input type="number" name="taskTime" placeholder="Duration of the task (in minutes please)" class="w3-input w3-border" required value=<?php echo $values['time']?>>
                             <br>
@@ -166,7 +166,7 @@ $task = allTask();
                 <br>
                 <input type="text" name="taskName" placeholder="Name of the task" class="w3-input w3-border" pattern="[a-zA-Z0-9\s]+" required>
                 <br>
-                <textarea name="taskDescription" style="resize: vertical;" class="w3-input w3-border" placeholder="Description of the task" pattern="[a-zA-Z0-9\s]+" required>
+                <input type="text" name="taskDescription" style="resize: vertical;" class="w3-input w3-border" placeholder="Description of the task" pattern="[a-zA-Z0-9\s]+" required>
                 <br>
                 <input type="number" name="taskTime" class="w3-input w3-border" placeholder="Duration of the task (in minutes please)" class="w3-input w3-border" required>
                 <br>
