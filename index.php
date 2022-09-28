@@ -122,7 +122,7 @@ $task = allTask();
                         <span onclick="modal('modalTask<?php echo $values['id']?>', 'close')" class="w3-button w3-display-topright">&times;</span>
                         <form action="#" method="post" class="w3-container">
                             <h3>New task:</h3>
-                            <input type="hidden" name="taskId" value="modalItem<?php echo $values['id']?>">
+                            <input type="hidden" name="todoListId" value="modalItem<?php echo $value['id']?>">
                             <br>
                             <input type="text" name="taskName" placeholder="Name of the task" class="w3-input w3-border" pattern="[a-zA-Z0-9\s]+" required value="<?php echo $values['name']?>">
                             <br>
