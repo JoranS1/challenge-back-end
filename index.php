@@ -82,14 +82,12 @@ $task = allTask();
             </div>
         </div>
 
-        <div class="w3-card-4">
+        <div class="listcard_flex">
 
         <?php foreach ($todo as $value):?>
             <div class="w3-card-4" style="display:inline-block; position:relative; height:100%">
             <header class="w3-container w3-light-grey">
                 <h3><?php echo $value['name'];?></h3>
-                <button class="w3-btn" onclick="sortTodo(<?php echo $value['id']; ?>, 'description')">
-            </button>
             <button class="w3-btn" onclick="sortTodo(<?php echo $value['id']; ?>, 'time')">
             <i class="fa-fa-clock"></i>
         </button>
@@ -97,7 +95,7 @@ $task = allTask();
             <i class="fa-fa-calendar-check-o" ></i>
         </button>
             </header>
-            <div class="w3-container" id="todoContainer<?php echo $value['id'];?>">
+            <div class="w3-container flex-container" id="todoContainer<?php echo $value['id'];?>">
             <?php foreach($task as $values):?>
             <div class="task" id="taskId<?php echo $values["id"]; ?>" data-todoID="<?php echo $values['id'];?>" data-taskName="<?php echo $values['name'];?>" data-taskTime="<?php echo $values['time'];?>" data-taskStatus="<?php echo $values['status']?>">
                 <h3><?php echo $values["name"];?></h3>
@@ -122,7 +120,7 @@ $task = allTask();
                         <span onclick="modal('modalTask<?php echo $values['id']?>', 'close')" class="w3-button w3-display-topright">&times;</span>
                         <form action="#" method="post" class="w3-container">
                             <h3>New task:</h3>
-                            <input type="hidden" name="todoListId" value="modalItem<?php echo $value['id']?>">
+                            <input type="hidden" name="taskId" value="modalItem<?php echo $value['id']?>">
                             <br>
                             <input type="text" name="taskName" placeholder="Name of the task" class="w3-input w3-border" pattern="[a-zA-Z0-9\s]+" required value="<?php echo $values['name']?>">
                             <br>
@@ -135,7 +133,7 @@ $task = allTask();
                                 echo 'Checked';
                             } ?>>
                             <label>Active</label><br>
-                            <input type="radio" name="taskStatus" value="0" <?php if($values['status']){
+                            <input type="radio" name="taskStatus" value="0" <?php if(!$values['status']){
                                 echo 'Checked';
                             } ?>>
                             <label>Inactive</label><br>
@@ -184,7 +182,7 @@ $task = allTask();
             <span onclick="modal('modalEditTodo<?php echo $value['id']?>', 'close')" cols="25" rows="10" class="w3-button w3-display-topright">&times;</span>
             <form action="#" method="post" class="w3-container">
                 <h3>Edit Todo List</h3>
-                <input type="hidden" name="todoListId" value="<?php echo $value['id']?>">
+                <input type="hidden" name="taskId" value="<?php echo $value['id']?>">
                 <br>
                 <input type="text" name="todoName" placeholder="Name of the todo list" class="w3-input w3-border" pattern="[a-zA-Z0-9\s]+" required value="<?php echo $value['name']?>">
                 <input type="submit" name="updateTodo" value="Update Todo List" class="w3-btn w3-block">

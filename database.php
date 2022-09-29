@@ -49,7 +49,6 @@ function addTask($description,$name,$time,$listId){
 	':name' => $name,
 	':description' => $description,
 	':time' => $time,
-	':status' => 1,
 	':listId' => $listId
 ));
 }
@@ -81,18 +80,17 @@ function getTask($id){
 	$singleTask = $query->fetch();
 	return $singleTask;
 }
-function updateTodo($name){
+function updateTodo($id,$name){
 	$conn = connAll();
 	$query = $conn->prepare("UPDATE todo SET name=:name WHERE id=:id");
-	$query->bindParam(':name', $name);
-	$query->execute();
+	$query->execute([':name' => $name, ':id'=>$id]);
 }
 function deleteTodo($id){
 	$conn = connAll();
 	$query = $conn->prepare("DELETE FROM todo WHERE id = ?");
 	$query->execute([$id]);
 }
-function filterStatus(){
+/*function filterStatus(){
 	$conn = connAll();
 	$query = $conn->prepare("SELECT * FROM task ORDER BY status");
 	$query->execute();
@@ -106,7 +104,7 @@ function filterTime(){
 	$query->execute();
 	$result = $query->fetchAll();
 	return $result;
-}
+}*/
 
 //clean functions
 $taskId = clean($_POST['taskId']);
@@ -133,7 +131,7 @@ if(isset($_POST['deleteTask'])){
 	deleteTask($taskId);
 }
 if (isset($_POST['updateTodo'])){
-	updateTodo($todoName);
+	updateTodo($todoName, $taskId);
 }
 if (isset($_POST['deleteTodo'])){
 	deleteTodo($todoListId);
