@@ -1,7 +1,7 @@
 <?php 
 include_once 'database.php'; 
 $todo = allTodo();
-$task = allTask();
+$task = allTaskOrderdByList($todo['id']);
 ?>
 
 <!DOCTYPE html>
@@ -30,9 +30,7 @@ $task = allTask();
                 for(let val of todoItems){
                     var currentIdName = val.id;
                     var currentTodoName = val.name;
-                    if(filter === "description"){
-                        var filterCheck = val.dataset.description;
-                    }else if(filter === "time"){
+                    if(filter === "time"){
                         var filterCheck = val.dataset.time;
                     }else if(filter === "status"){
                         var filterCheck = val.dataset.status;
@@ -89,18 +87,18 @@ $task = allTask();
             <header class="w3-container w3-light-grey">
                 <h3><?php echo $value['name'];?></h3>
             <button class="w3-btn" onclick="sortTodo(<?php echo $value['id']; ?>, 'time')">
-            <i class="fa-fa-clock"></i>
+            <i class="fa-fa-clock" aria-hidden="true"></i>
         </button>
             <button class="w3-btn" onclick="sortTodo(<?php echo $value['id']; ?>, 'status')">
-            <i class="fa-fa-calendar-check-o" ></i>
+            <i class="fa-fa-calendar-check-o" aria-hidden="true"></i>
         </button>
             </header>
             <div class="w3-container flex-container" id="todoContainer<?php echo $value['id'];?>">
             <?php foreach($task as $values):?>
-            <div class="task" id="taskId<?php echo $values["id"]; ?>" data-todoID="<?php echo $values['id'];?>" data-taskName="<?php echo $values['name'];?>" data-taskTime="<?php echo $values['time'];?>" data-taskStatus="<?php echo $values['status']?>">
+            <div class="task" id="taskId<?php echo $values["id"]; ?>" data-taskName="<?php echo $values['name'];?>" data-taskTime="<?php echo $values['time'];?>" data-taskStatus="<?php echo $values['status']?>" data-todoListId="<?php echo $value["id"];?>">
                 <h3><?php echo $values["name"];?></h3>
                 <p><?php echo $values["description"];?></p>
-                <span class="w3-card w3-purple">Time: <?php echo $values["time"]?></span>
+                <span class="w3-card w3-purple">Time: <?php echo $values["time"]; ?> min</span>
                 <span class="w3-tag w3-pink"><?php 
                 if ($values['status']){
                     echo "active";
@@ -119,8 +117,8 @@ $task = allTask();
                     <div class="w3-container">
                         <span onclick="modal('modalTask<?php echo $values['id']?>', 'close')" class="w3-button w3-display-topright">&times;</span>
                         <form action="#" method="post" class="w3-container">
-                            <h3>New task:</h3>
-                            <input type="hidden" name="taskId" value="modalItem<?php echo $value['id']?>">
+                            <h3>The task:</h3>
+                            <input type="hidden" name="taskId" value="<?php echo $values['id']?>">
                             <br>
                             <input type="text" name="taskName" placeholder="Name of the task" class="w3-input w3-border" pattern="[a-zA-Z0-9\s]+" required value="<?php echo $values['name']?>">
                             <br>
@@ -156,7 +154,7 @@ $task = allTask();
     <div id="modalNewTask<?php echo $value['id']?>" class="w3-modal">
         <div class="w3-modal-content">
             <div class="w3-container">
-            <span onclick="modal('modal<?php echo $value['id']?>', 'close')" cols="25" rows="10" class="w3-button w3-display-topright">&times;</span>
+            <span onclick="modal('modalNewTask<?php echo $value['id']?>', 'close')" cols="25" rows="10" class="w3-button w3-display-topright">&times;</span>
 
             <form action="#" method="post" class="w3-container">
                 <h3>New task</h3>
@@ -182,7 +180,7 @@ $task = allTask();
             <span onclick="modal('modalEditTodo<?php echo $value['id']?>', 'close')" cols="25" rows="10" class="w3-button w3-display-topright">&times;</span>
             <form action="#" method="post" class="w3-container">
                 <h3>Edit Todo List</h3>
-                <input type="hidden" name="taskId" value="<?php echo $value['id']?>">
+                <input type="hidden" name="todoListId" value="<?php echo $value['id']?>">
                 <br>
                 <input type="text" name="todoName" placeholder="Name of the todo list" class="w3-input w3-border" pattern="[a-zA-Z0-9\s]+" required value="<?php echo $value['name']?>">
                 <input type="submit" name="updateTodo" value="Update Todo List" class="w3-btn w3-block">

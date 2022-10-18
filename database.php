@@ -36,25 +36,35 @@ function allTask(){
 	$rows = $result->fetchAll();
 	return $rows;
 }
+function allTaskOrderdByList($listId){
+	$conn = connAll();
+	$query = "SELECT * FROM task ORDER BY id WHERE listId = :listId";
+	$conn = connAll();
+	$result = $conn->prepare($query);
+	$result->execute([":listId" => $listId]);
+	$rows = $result->fetchAll();
+	return $rows;
+}
 function addTodo($name){
 	$conn = connAll();
 	$query = $conn->prepare("INSERT INTO todo (id, name) VALUES (NULL, :name)");
 	$query -> execute(array(
 		':name' => $name));
 }
-function addTask($description,$name,$time,$listId){
+function addTask($name, $description,$time,$listId){
+	
 	$conn = connAll();
-	$query = $conn->prepare("INSERT INTO task (id, name,description, time, status,listId) VALUES (NULL, name, :description, :time, 1,:listId)");
-	$query -> execute(array(
+	$query = $conn->prepare("INSERT INTO task (id, name, description, time, status, listId) VALUES (NULL, :name, :description, :time, 1, :listId)");
+	$query -> execute([
 	':name' => $name,
 	':description' => $description,
 	':time' => $time,
 	':listId' => $listId
-));
+]);
 }
 function updateTask($id,$name,$description,$time,$status){
 	$conn = connAll();
-	$query = $conn->prepare("UPDATE task SET name=:name description=:description, time=:time, status=:status WHERE id=:id");
+	$query = $conn->prepare("UPDATE task SET name=:name, description=:description, time=:time, status=:status WHERE id=:id");
 	$query->execute([":name" => $name, ":description" => $description, ":time" => $time, ":status" => $status, ":id" => $id]);
 
 	
@@ -122,16 +132,19 @@ if (isset($_POST['makeTodoList'])){
 	addTodo($todoName);
 }
 if(isset($_POST['makeTask'])){
+	
 	addTask($taskName,$taskDescription, $taskTime, $todoListId);
 }
 if(isset($_POST['updateTask'])){
-	updateTask($taskId, $taskName,$taskDescription, $taskTime, $taskStatus, $todoListId);
+	
+	updateTask($taskId, $taskName,$taskDescription, $taskTime, $taskStatus);
 }
 if(isset($_POST['deleteTask'])){
 	deleteTask($taskId);
 }
 if (isset($_POST['updateTodo'])){
-	updateTodo($todoName, $taskId);
+	updateTodo($todoListId, $todoName);
+	
 }
 if (isset($_POST['deleteTodo'])){
 	deleteTodo($todoListId);
