@@ -38,8 +38,8 @@ function allTask(){
 }
 function allTaskOrderdByList($listId){
 	$conn = connAll();
-	$query = "SELECT * FROM task ORDER BY id WHERE listId = :listId";
-	$conn = connAll();
+	$query = "SELECT * FROM task WHERE listId = :listId";
+	
 	$result = $conn->prepare($query);
 	$result->execute([":listId" => $listId]);
 	$rows = $result->fetchAll();

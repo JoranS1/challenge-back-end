@@ -1,7 +1,7 @@
 <?php 
 include_once 'database.php'; 
 $todo = allTodo();
-$task = allTaskOrderdByList($todo['id']);
+
 ?>
 
 <!DOCTYPE html>
@@ -25,7 +25,7 @@ $task = allTaskOrderdByList($todo['id']);
             }
 
             function sortTodo(todo, filter){
-                var todoItems = document.querySelectorAll("[data-todoID='"+ todo + "']")
+                var todoItems = document.querySelectorAll("[data-todoListID='"+ todo + "']")
                 var sortTodo = [];
                 for(let val of todoItems){
                     var currentIdName = val.id;
@@ -94,7 +94,9 @@ $task = allTaskOrderdByList($todo['id']);
         </button>
             </header>
             <div class="w3-container flex-container" id="todoContainer<?php echo $value['id'];?>">
-            <?php foreach($task as $values):?>
+            <?php 
+            $task = allTaskOrderdByList($value['id']);
+            foreach($task as $values):?>
             <div class="task" id="taskId<?php echo $values["id"]; ?>" data-taskName="<?php echo $values['name'];?>" data-taskTime="<?php echo $values['time'];?>" data-taskStatus="<?php echo $values['status']?>" data-todoListId="<?php echo $value["id"];?>">
                 <h3><?php echo $values["name"];?></h3>
                 <p><?php echo $values["description"];?></p>
