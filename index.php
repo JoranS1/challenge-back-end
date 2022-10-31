@@ -1,7 +1,10 @@
 <?php 
 include_once 'database.php'; 
 $todo = allTodo();
-
+$tasks;
+if(array_key_exists('filterButton', $_POST)){
+    filterStatus();
+}
 ?>
 
 <!DOCTYPE html>
@@ -34,6 +37,9 @@ $todo = allTodo();
                         var filterCheck = val.dataset.time;
                     }else if(filter === "status"){
                         var filterCheck = val.dataset.status;
+                        if(filterCheck === "inactive"){
+                            filterCheck.style.display = "none";
+                        }
                     } else{
                         filterCheck = currentTodoName;
                     }
@@ -91,6 +97,9 @@ $todo = allTodo();
         </button>
             <button class="w3-btn" onclick="sortTodo(<?php echo $value['id']; ?>, 'status')">
             <i class="fa-fa-calendar-check-o" aria-hidden="true"></i>
+            <form method="post" action="#">
+                <input type="button" name="filterButton" class="w3-btn">
+            </form>
         </button>
             </header>
             <div class="w3-container flex-container" id="todoContainer<?php echo $value['id'];?>">

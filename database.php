@@ -39,7 +39,6 @@ function allTask(){
 function allTaskOrderdByList($listId){
 	$conn = connAll();
 	$query = "SELECT * FROM task WHERE listId = :listId";
-	
 	$result = $conn->prepare($query);
 	$result->execute([":listId" => $listId]);
 	$rows = $result->fetchAll();
@@ -100,14 +99,28 @@ function deleteTodo($id){
 	$query = $conn->prepare("DELETE FROM todo WHERE id = ?");
 	$query->execute([$id]);
 }
-/*function filterStatus(){
+function filterAscStatus(){
+	$conn = connAll();
+	$query = $conn->prepare("SELECT * FROM task ORDER BY status ASC");
+	$query->execute();
+	$result = $query->fetchAll();
+	return $result;
+}
+function filterDescStatus(){
+	$conn = connAll();
+	$query = $conn->prepare("SELECT * FROM task ORDER BY status DESC");
+	$query->execute();
+	$result = $query->fetchAll();
+	return $result;
+}
+function filterStatus(){
 	$conn = connAll();
 	$query = $conn->prepare("SELECT * FROM task ORDER BY status");
 	$query->execute();
 	$result = $query->fetchAll();
 	return $result;
 }
-
+/*
 function filterTime(){
 	$conn = connAll();
 	$query = $conn->prepare("SELECT * FROM task ORDER BY time DESC");
