@@ -164,10 +164,10 @@ if (isset($_POST['deleteTodo'])){
 }
 
 if (isset($_POST['filterButton'])){
-	die("Name: " + $taskName + "Status: " + $taskStatus );
+	//die("Name: " + $taskName + "Status: " + $taskStatus );
 	filterAscStatus();
 }
 if (isset($_POST['filterDescButton'])){
-	die("Name: " + $taskName + "Status: " + $taskStatus );
+	//die("Name: " + $taskName + "Status: " + $taskStatus );
 	filterDescStatus();
 }

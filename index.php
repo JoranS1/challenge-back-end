@@ -98,8 +98,8 @@ $tasks;
             <i class="fa-fa-calendar-check-o" aria-hidden="true"></i>
             </button>
             <form method="post" action="#">
-                <input type="button" name="filterButton" class="w3-button">
-                <input type="button" name="filterDescButton" class="w3-button">
+                <input type="submit" name="filterButton" class="w3-button button">
+                <input type="submit" name="filterDescButton" class="w3-button button">
             </form>
         
             </header>
@@ -204,6 +204,6 @@ $tasks;
         <?php endforeach;?>
         </div>
     </div>
-        
+    <script src="jquery.js"></script>
 </body>
 </html>
