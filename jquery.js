@@ -1,12 +1,13 @@
 "use strict";
 
-$("document").ready(function(){
-    $('.button').click(function(){
+$("document").jquery(function(){
+    $('.button').on(function(){
         var clickBtnValue = $(this).val();
         var ajaxurl = "ajax.php",
         data = {'action': clickBtnValue};
         $.post(ajaxurl, data, function (response) {
-            alert("SUCCESS");
+            response = "The function was repeated succesfully";
+            alert(response);
         })
     })
 })
