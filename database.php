@@ -115,7 +115,7 @@ function filterDescStatus(){
 }
 function filterStatus(){
 	$conn = connAll();
-	$query = $conn->prepare("SELECT * FROM task ORDER BY status");
+	$query = $conn->prepare("SELECT * FROM task WHERE status = 1");
 	$query->execute();
 	$result = $query->fetchAll();
 	return $result;
@@ -163,11 +163,5 @@ if (isset($_POST['deleteTodo'])){
 	deleteTodo($todoListId);
 }
 
-if (isset($_POST['filterButton'])){
-	//die("Name: " + $taskName + "Status: " + $taskStatus );
-	filterAscStatus();
-}
-if (isset($_POST['filterDescButton'])){
-	//die("Name: " + $taskName + "Status: " + $taskStatus );
-	filterDescStatus();
-}
+
+

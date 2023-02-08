@@ -2,13 +2,17 @@
 include_once 'database.php'; 
 $todo = allTodo();
 $tasks;
-if($_GET){
-    if(isset($_GET['filterButton'])){
+
+    if(isset($_POST['filterButton'])){
         filterAscStatus();
-    } else if(isset($_GET['filterDescButton'])){
+    } 
+    if(isset($_POST['filterDescButton'])){
         filterDescStatus();
     }
-}
+    if(isset($_POST['filterActive'])){
+        filterStatus();
+    }
+
 ?>
 
 <!DOCTYPE html>
@@ -20,7 +24,6 @@ if($_GET){
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <title>Todo list</title>
 	<link rel="stylesheet" href="style/style.css">
-    <script src="jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script>
             function modal(elementID, openedClosed){
@@ -103,9 +106,10 @@ if($_GET){
             <button class="w3-btn" onclick="sortTodo(<?php echo $value['id']; ?>, 'status')">
             <i class="fa-fa-calendar-check-o" aria-hidden="true"></i>
             </button>
-            <form method="get" action="#">
+            <form method="post" action="#">
                 <input type="submit" name="filterButton" value="filterButton" class="w3-button button">
                 <input type="submit" name="filterDescButton" value="filterDescButton" class="w3-button button">
+                <input type="submit" name="filterActive" value="Active filter" class="w3-button button">
             </form>
         
             </header>
